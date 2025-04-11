@@ -1,8 +1,35 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import fetchLogo from '../assets/fetchLogo.svg';
+import { useAuth } from '../utilities/useAuth';
+
+const BASE_URL = 'https://frontend-take-home-service.fetch.com';
 
 const HomePage = () => {
+  const { name, email, setName, setEmail } = useAuth();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const url = `${BASE_URL}/auth/login`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      } else {
+        console.log('Login successful', response); // update to navigate to the next page
+      }
+    } catch (error) {
+      console.error((error as Error).message);
+    }
+  };
+
   return (
     <div
       style={{
@@ -24,18 +51,32 @@ const HomePage = () => {
         <img src={fetchLogo} alt="Fetch logo" />
       </div>
       <h2>Please log in to get started</h2>
-      <div
+      <form
+        onSubmit={e => handleLogin(e)}
         style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
         }}
       >
-        <TextField id="outlined-basic" label="Name" variant="outlined" />
-        <TextField id="outlined-basic" label="Email" variant="outlined" />
-        <Button variant="contained">Login</Button>
-      </div>
-      <a href="https://react.dev" target="_blank"></a>
+        <TextField
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <TextField
+          id="outlined-basic"
+          label="Email"
+          variant="outlined"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <Button variant="contained" type="submit">
+          Login
+        </Button>
+      </form>
     </div>
   );
 };

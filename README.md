@@ -4,6 +4,7 @@ Project uses the following:
 
 - React
 - TypeScript
+- Vite
 - Context API for state handling
 - MaterialUI
 - Prettier

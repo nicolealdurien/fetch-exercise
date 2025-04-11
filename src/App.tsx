@@ -1,7 +1,7 @@
 import './App.css';
 import { HomePage } from './components/HomePage';
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthProvider } from './context/authContext';
 
 const theme = createTheme({
   components: {
@@ -47,7 +47,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <HomePage />
+      <AuthProvider>
+        <HomePage />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
