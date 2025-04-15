@@ -2,11 +2,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import fetchLogo from '../assets/fetchLogo.svg';
 import { useAuth } from '../utilities/useAuth';
-
-const BASE_URL = 'https://frontend-take-home-service.fetch.com';
+import { BASE_URL } from '../constants/BASE_URL';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const { name, email, setName, setEmail } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,12 +19,13 @@ const HomePage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ name, email }),
       });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       } else {
-        console.log('Login successful', response); // update to navigate to the next page
+        navigate('/search');
       }
     } catch (error) {
       console.error((error as Error).message);
