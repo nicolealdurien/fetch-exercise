@@ -47,8 +47,21 @@ const fake_dog_data = [
 ];
 
 const SearchPage = () => {
+  const [page, setPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [dogData, setDogData] = useState<IDogDataTypes[] | []>([]);
   const { name } = useAuth();
   const navigate = useNavigate();
+
+  const PER_PAGE = 40;
+
+  const params = {
+    size: PER_PAGE.toString(),
+    from: (PER_PAGE * (page - 1)).toString(),
+    sort: `breed:${sortOrder}`,
+  };
+
+  const searchUrl = `${BASE_URL}/dogs/search?size=${params.size}&from=${params.from}&sort=${params.sort}`;
 
   const handleLogout = async () => {
     const url = `${BASE_URL}/auth/logout`;
@@ -69,19 +82,6 @@ const SearchPage = () => {
       console.error((error as Error).message);
     }
   };
-
-  const PER_PAGE = 40;
-  const [page, setPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [dogData, setDogData] = useState<IDogDataTypes[] | []>([]);
-
-  const params = {
-    size: PER_PAGE.toString(),
-    from: (PER_PAGE * (page - 1)).toString(),
-    sort: `breed:${sortOrder}`,
-  };
-
-  const searchUrl = `${BASE_URL}/dogs/search?size=${params.size}&from=${params.from}&sort=${params.sort}`;
 
   const retrieveDogInfo = useCallback(async (ids: string[]) => {
     try {
@@ -175,8 +175,8 @@ const SearchPage = () => {
           maxWidth: '98%',
         }}
       >
-        {dogData.map(dog => {
-          // {fake_dog_data.map(dog => {
+        {/* {dogData.map(dog => { */}
+        {fake_dog_data.map(dog => {
           return (
             <div key={dog.id} style={{ display: 'flex', flexDirection: 'row', padding: '20px' }}>
               <Card sx={{ maxWidth: 400, border: '3px solid #FFA900' }}>
